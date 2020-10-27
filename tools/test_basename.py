@@ -10,21 +10,22 @@ def test_get_basename():
     assert get_basename('/usr/sort') == 'sort'
 
 
-def test_option_a(capsys):
+def test_option_a():
     argv1 = ['-a']
-    option_a(argv1)
-    captured = capsys.readouterr()
-    assert captured.out == ''
+    result = option_a(argv1)
+    assert result == ''
 
     argv2 = ['-a', '/usr/cmp']
-    option_a(argv2)
-    captured = capsys.readouterr()
-    assert captured.out == 'cmp\n'
+    result = option_a(argv2)
+    assert result == 'cmp\n'
 
     argv3 = ['-a', '/usr/cmp', 'cmp']
-    option_a(argv3)
-    captured = capsys.readouterr()
-    assert captured.out == 'cmp\ncmp\n'
+    result = option_a(argv3)
+    assert result == 'cmp\ncmp\n'
+
+    argv4 = ['-a', 'sort']
+    result = option_a(argv4, delimiter='')
+    assert result == 'sort'
 
 
 def test_option_s(capsys):
@@ -34,11 +35,13 @@ def test_option_s(capsys):
         option_s(argv1)
     
     argv2 = ['-s', '.h']
-    option_s(argv2)
-    captured = capsys.readouterr()
-    assert captured.out == ''
+    result = option_s(argv2)
+    assert result == ''
 
     argv3 = ['-s', '.h', '/usr/sort', 'cmp', '/usr/stdio.h', '/usr/stdio.c']
-    option_s(argv3)
-    captured = capsys.readouterr()
-    assert captured.out == 'sort\ncmp\nstdio\nstdio.c\n'
+    result = option_s(argv3)
+    assert result == 'sort\ncmp\nstdio\nstdio.c\n'
+
+    argv4 = ['-s', '.h', 'stdio.h', 'stdio.c']
+    result = option_s(argv4, delimiter='')
+    assert result == 'stdiostdio.c'
